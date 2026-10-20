@@ -1,32 +1,28 @@
 # scMicroglia
 
-Single-cell analysis of microglial states in Alzheimer’s disease, with a focus on sex-specific and cross-region differences between hippocampus (HPC) and prefrontal cortex (PFC).
+Single-cell analysis of microglial states in Alzheimer’s disease, with a focus on sex-specific and cross-region molecular differences between hippocampus (HPC) and prefrontal cortex (PFC).
 
-This repository contains the analysis code, plotting scripts, and manuscript figure generation pipeline used to study microglial state markers, differential expression, enriched pathways, and transcription-factor activity.
+This repository contains the reproducible analysis and figure-generation workflow used to study microglial state annotations, differential expression, pathway enrichment, and transcription-factor regulatory networks in Alzheimer’s disease. The project combines Python-based figure generation with R-based publication plotting and a shared manuscript style system.
 
-## Project overview
+## Study summary
 
-The analysis workflow implemented in this codebase is built around:
+The codebase implements a single-cell analysis pipeline that:
 
-- single-cell / microglia state annotation across brain regions
-- within-sex differential expression contrasts comparing inflammatory AD-associated states vs homeostatic references
-- sex-shared, sex-specific, and sex-dimorphic gene sets
-- cross-region overlap between HPC and PFC signatures
-- functional enrichment and network inference for biological interpretation
-- publication-ready figure generation in Python and R
+- profiles microglial states across brain regions
+- compares disease-associated inflammatory states against homeostatic reference states
+- tests sex-shared, female-specific, male-specific, and sex-dimorphic gene programs
+- examines overlap between HPC and PFC signatures
+- performs functional enrichment and network-level interpretation
+- generates publication-quality figures and summary tables
 
-## Repository structure
+## Repository layout
+
+The repository currently preserves the original analysis scripts while adding a cleaner project organization for ongoing work.
 
 ```text
 scMicroglia/
 ├── README.md
-├── .gitignore
 ├── requirements.txt
-├── docs/
-│   ├── project-structure.md
-│   └── workflow.md
-├── data/
-│   └── README.md
 ├── scripts/
 │   ├── fig1.py
 │   ├── fig2.py
@@ -52,105 +48,120 @@ scMicroglia/
 │   ├── Supplementary_Figure_S6.R
 │   ├── theme_scm.R
 │   └── README.md
+├── analysis/
+│   ├── python/
+│   │   └── README.md
+│   ├── r/
+│   │   └── README.md
+│   └── README.md
+├── data/
+│   ├── raw/
+│   │   └── README.md
+│   ├── processed/
+│   │   └── README.md
+│   └── README.md
 ├── results/
+│   ├── figures/
+│   │   └── README.md
+│   ├── tables/
+│   │   └── README.md
+│   └── README.md
+├── docs/
+│   ├── workflow.md
 │   └── README.md
 └── out/
-    └── generated figures (created at runtime)
+    └── generated figures and exports from local runs
 ```
 
-## What is in the codebase
+## Primary analysis modules
 
-### Python scripts
+### Python figure generation
 
-The `scripts/` directory contains the main plotting and analysis scripts used to generate publication figures and tables.
+The `scripts/` directory contains the primary Python-based plotting pipeline:
 
-- `fig1.py`: study design, DEG categories, cross-region overlap, core gene heatmap
+- `fig1.py`: study design, DEG categories, overlap analysis, and core gene heatmap
 - `fig2.py`: region- and sex-specific biological interpretation
-- `fig3.py`: gene-set and regulatory analyses
-- `fig4_submission.py`: final submission figure set
-- `build_supp_figs_S1-S5.py`: supplementary figure generation
+- `fig3.py`: enrichment and mechanistic analyses
+- `fig4_submission.py`: final submission-ready figures
+- `build_supp_figs_S1-S5.py`: supplementary analysis figures
+- `figdata.py` and `figstyle.py`: shared data and plotting utilities
 - `tables_T1_3.py` and `tables_T4.py`: summary tables
-- `figdata.py` and `figstyle.py`: shared data and style helpers
-- `fig3_enrichGO_recompute.R`: R-based enrichment recomputation used as part of the workflow
 
-### R scripts
+### R graphics workflow
 
-The `R_scripts/` directory contains figure generation code in R using `ggplot2` and associated packages.
+The `R_scripts/` directory contains the R plotting workflow used for consistent manuscript styling and figure rendering:
 
-- `theme_scm.R`: shared plotting theme, fonts, colors, and export utilities
-- `Figure1.R` to `Figure4.R`: primary manuscript figures
-- `Supplementary_Figure_S*.R`: supplementary figure panels
+- `theme_scm.R`: shared color palette, typography, and export helpers
+- `Figure1.R` to `Figure4.R`: main paper figures
+- `Supplementary_Figure_S*.R`: supplementary panels
 
-## Suggested project workflow
+## Recommended data organization
 
-1. Prepare input data and metadata in `data/`.
-2. Run the Python figure scripts in `scripts/` to generate figures and summary tables.
-3. Use the R scripts in `R_scripts/` for publication-style figure panels and consistent formatting.
-4. Save generated outputs under `results/` or `out/`.
-5. Keep raw data separate from analyzed results to preserve reproducibility.
+For reproducibility and long-term maintenance, raw inputs should live under `data/raw/`, while processed and analysis-ready tables should be placed in `data/processed/`.
 
-## Dependencies
+Suggested structure:
 
-### Python
+- `data/raw/`: original single-cell matrices, metadata, and external annotations
+- `data/processed/`: cleaned cell-level objects, DE tables, marker lists, and intermediate datasets
+- `analysis/`: scripts and notebooks for the computational workflow
+- `results/`: final generated figures, summary tables, and manuscript outputs
+- `out/`: runtime-generated figures from local script execution
 
-Install the core packages used by the scripts:
+## Setup and dependencies
+
+The project relies on Python and R packages for data processing, plotting, and export. The Python dependencies are listed in `requirements.txt`.
+
+### Python environment
 
 ```bash
-python -m pip install numpy pandas matplotlib
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-Additional packages may be needed depending on local analysis inputs or if you extend the plotting pipeline.
+### R dependencies
 
-### R
-
-Install the plotting dependencies used in `R_scripts/theme_scm.R`:
+The R scripts use `ggplot2`, `patchwork`, `ggrepel`, `scales`, and `ragg`.
 
 ```r
 install.packages(c("ggplot2", "patchwork", "ggrepel", "scales", "ragg"))
 ```
 
-## Data handling recommendation
+## Execution workflow
 
-This repository currently focuses on the analytical code and plotting logic. For a clean single-cell project workflow, use the following structure:
+1. Place raw input data in `data/raw/`.
+2. Run the preprocessing and analysis steps required for your datasets.
+3. Store cleaned/intermediate outputs in `data/processed/`.
+4. Use scripts in `scripts/` and `R_scripts/` to reproduce figures.
+5. Save final figures and tables in `results/figures/` and `results/tables/`.
+6. Preserve raw data separately from generated outputs to maintain a clean, auditable pipeline.
 
-- `data/raw/`: original raw datasets and metadata
-- `data/processed/`: cleaned matrices, annotations, and analysis tables
-- `results/`: final figure exports and summary outputs
-- `out/`: generated plots from scripts when run locally
+## Project conventions
 
-The current repository does not contain the raw single-cell count matrices, which are typically kept outside the Git repository for size and privacy reasons.
+- Keep raw data outside of tracked outputs when file sizes are large.
+- Store processed tables and reusable analytical objects in `data/processed/`.
+- Prefer script-driven reproducibility over notebook-only workflows.
+- Update `docs/workflow.md` whenever the analysis pipeline changes.
+- Keep figure-generation scripts modular and version-aware.
 
-## Notes about the biological analysis
+## Scientific context
 
-The project centers on microglial states in Alzheimer’s disease, comparing disease-associated inflammatory states with homeostatic reference states across the HPC and PFC.
+The repository focuses on microglial states in Alzheimer’s disease and examines how inflammatory disease-associated signatures vary by sex and brain region. The analysis integrates differential expression, gene-set enrichment, and regulatory network interpretation to identify core microglial programs relevant to disease biology.
 
-Key analyses in the code include:
+## Notes
 
-- sex-shared vs sex-specific differential expression
-- cross-region overlap of candidate genes
-- functional enrichment of core gene programs
-- transcription-factor network and activity analysis
-- figure-ready summaries for manuscript and supplementary panels
-
-## Repository maintenance
-
-To keep this project organized over time:
-
-- keep raw data out of version control
-- store processed tables under `data/processed/`
-- keep figure-generation scripts in their current folders
-- save outputs in `results/` or `out/`
-- document any new analysis modules in `docs/`
+- The repository currently contains the analytical code and figure-generation pipeline but not necessarily the full raw single-cell dataset.
+- The project structure is designed to support both reproducible manuscript analysis and transparent collaboration.
+- The existing `scripts/` and `R_scripts/` folders remain in place for compatibility with the current workflow.
 
 ## License
 
-This repository currently does not specify a license file. If publication or distribution is intended, add an explicit license before public release.
+This repository does not currently include a license file. If the project will be shared publicly or submitted for publication, add an explicit license before release.
 
-## Contribution guidance
+## Contact and maintenance
 
-When adding new analysis modules:
+This project is best maintained by keeping the analytical workflow organized, documenting generated outputs, and updating the README whenever major analysis steps are added or revised.
 
-- place reusable functions in a dedicated utility file or script
-- keep figure scripts modular and script-driven
-- store generated plots outside the repo if they are large or generated outputs
-- update this README when adding major analytical steps
+---
+
+For detailed execution steps and project conventions, see `docs/workflow.md`.
